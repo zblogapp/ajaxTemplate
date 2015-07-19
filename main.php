@@ -12,15 +12,18 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 
 $selectors = array();
-$callback = '';
+$callbackIng = '';
+$callbackEd = '';
 if (count($_POST) > 0) {
 	$selectorsPost = GetVars('selector', 'POST');
-	$callback = GetVars('callback', 'POST');
+	$callbackIng = GetVars('callback-ing', 'POST');
+	$callbackEd = GetVars('callback-ed', 'POST');
 	foreach ($selectorsPost as $key => $value) {
 		$selectors[] = $value;
 	}
 	$zbp->Config('ajaxTemplate')->selectors = serialize($selectors);
-	$zbp->Config('ajaxTemplate')->callback = $callback;
+	$zbp->Config('ajaxTemplate')->callbackIng = $callbackIng;
+	$zbp->Config('ajaxTemplate')->callbackEd = $callbackEd;
 	$zbp->SaveConfig('ajaxTemplate');
 	$zbp->SetHint('good');
 	Redirect('./main.php');
@@ -29,7 +32,8 @@ if (count($_POST) > 0) {
 	if (!$selectors) {
 		$selectors = array();
 	}
-	$callback = $zbp->Config('ajaxTemplate')->callback;
+	$callbackIng = $zbp->Config('ajaxTemplate')->callbackIng;
+	$callbackEd = $zbp->Config('ajaxTemplate')->callbackEd;
 }
 ?>
 <div id="divMain">
@@ -58,13 +62,24 @@ if (count($_POST) > 0) {
 				</tr>
 				<tr height="32">
 					<td width="30%" align="left">
-						<p> <b>· 回调JavaScript函数</a></b>
+						<p> <b>· 切换过程回调JavaScript函数</a></b>
 							<br/>
 							<span class="note">&nbsp;&nbsp;参数：pageObject<br/>&nbsp;&nbsp;不需要另行包装function(){}</span>
 						</p>
 					</td>
 					<td>
-					<textarea style="width: 80%" rows="20" name="callback"><?php echo htmlspecialchars($callback)?></textarea>
+					<textarea style="width: 80%" rows="20" name="callback-ing"><?php echo htmlspecialchars($callbackIng)?></textarea>
+					</td>
+				</tr>
+				<tr height="32">
+					<td width="30%" align="left">
+						<p> <b>· 切换完毕回调JavaScript函数</a></b>
+							<br/>
+							<span class="note">&nbsp;&nbsp;参数：pageObject、xhrData<br/>&nbsp;&nbsp;不需要另行包装function(){}</span>
+						</p>
+					</td>
+					<td>
+					<textarea style="width: 80%" rows="20" name="callback-ed"><?php echo htmlspecialchars($callbackEd)?></textarea>
 					</td>
 				</tr>			</table>
 			<hr/>
